@@ -1,0 +1,32 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+const { v4: uuid } = require('uuid')
+
+const TeacherSchema = new Schema({
+    uuid: {
+        type: String,
+        required: true,
+        default: uuid
+    },
+    teacherName: {
+        type: String,
+        default: false,
+        required: true
+    },
+    dob: {
+        type: String,
+        required: true
+    },
+    languages: {
+        type: [String],
+        required: true
+    },
+    classes: {
+        type: [String],
+        required: false
+    },
+})
+
+const Teacher = mongoose.model("Teacher", TeacherSchema)
+
+module.exports = Teacher;
