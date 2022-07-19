@@ -7,6 +7,8 @@ const { studentRouter, teacherRouter, classRouter } = require('./routes');
 app.use(express.json());
 app.use(cors());
 
+app.get('/', (_, res) => res.send('Server is listening...'));
+
 app.use('/api/students', studentRouter);
 app.use('/api/teachers', teacherRouter);
 app.use('/api/classes', classRouter);
