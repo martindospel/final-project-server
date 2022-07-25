@@ -14,7 +14,7 @@ app.use('/api/teachers', teacherRouter);
 app.use('/api/classes', classRouter);
 
 if (!module.parent) {
-  app.listen(4321, () => console.log('server running on port: 4321'));
+  app.listen(process.env.PORT || 4321, () => console.log('server running on port: 4321'));
 };
 
 module.exports = app;
