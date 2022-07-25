@@ -1,7 +1,6 @@
 const { Class, Student } = require('../db');
 const express = require('express');
 const router = express.Router();
-const { v4: uuid } = require('uuid');
 
 // get one class
 router.get('/:uuid', async (req, res) => {
