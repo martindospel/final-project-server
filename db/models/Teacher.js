@@ -21,10 +21,7 @@ const TeacherSchema = new Schema({
         type: [String],
         required: true
     },
-    classes: {
-        type: [String],
-        required: false
-    },
+
 })
 
 const Teacher = mongoose.model("Teacher", TeacherSchema)

@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 const { v4: uuid } = require('uuid')
 
 const ClassSchema = new Schema({
-    uuid: {
+    teacherUuid: {
         type: String,
         required: true,
-        default: uuid
+        default: '1'
     },
     className: {
         type: String,
@@ -16,7 +16,8 @@ const ClassSchema = new Schema({
     students: {
         type: [Object],
         default: []
-    }
+    },
+
 })
 
 const Class = mongoose.model("Class", ClassSchema)
