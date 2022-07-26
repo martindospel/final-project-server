@@ -8,4 +8,14 @@ router.get('/:uuid', async (req, res) => {
   res.send(teacher);
 })
 
+router.post('/signin', async (req, res) => {
+  const teacher = await Teacher.findOne({ fullName: req.body.fullName, email: req.body.email });
+  if (teacher) {
+    res.send(teacher)
+  } else {
+    const newTeacher = await Teacher.create({ fullName: req.body.fullName, email: req.body.email });
+    res.send(newTeacher)
+  }
+})
+
 module.exports = router;
