@@ -50,4 +50,12 @@ router.patch("/:studentUuid/:timelineUuid", async (req, res) => {
   res.send(student);
 });
 
+// delete one student from the class
+router.delete("/:uuid", async (req, res) => {
+  await Student.deleteOne({ uuid: req.params.uuid });
+  res.sendStatus(200);
+});
+
+
+
 module.exports = router;
