@@ -13,11 +13,6 @@ const ClassSchema = new Schema({
         default: false,
         required: true
     },
-    students: {
-        type: [Object],
-        default: []
-    },
-
 })
 
 const Class = mongoose.model("Class", ClassSchema)
