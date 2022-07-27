@@ -9,9 +9,6 @@ const googleClient = new OAuth2Client({
   clientSecret: process.env.SECRET_KEY,
 });
 
-// googleClient.getTokenInfo("ya29.A0AVA9y1sbEbgxdoo0fBrLZG0cqCwFuWFnThNDEDzNzxLDWUjCz602H3t3BmWytTPOv-r_NTUI_HOPxdmys8I2Wf4LkWBFkkXGbHID_Z1LHjtxIwr2z3mCR_cSXikKZlaIUK-RyYUdGTjYfWDvk0kmUIUX1tE-qAYUNnWUtBVEFTQVRBU0ZRRTY1ZHI4SVkzV2Jjc0xXV2oyNXV0REJjeEM3Zw0165")
-//   .then(response => console.log(response.em))
-
 // login one teacher
 router.post("/login/:access_token", async (req, res) => {
   try {

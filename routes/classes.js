@@ -9,26 +9,30 @@ Date.prototype.getWeek = function () {
 
 // get one class
 router.get("/:uuid", async (req, res) => {
-  const className = await Class.findOne({ uuid: req.params.uuid });
-  const students = await Student.find({ classUuid: className.uuid });
+  const theClass = await Class.findOne({ uuid: req.params.uuid });
+  if (!theClass) return res.sendStatus(404);
+  const students = await Student.find({ classUuid: theClass?.uuid });
   res.send({
-    uuid: className.uuid,
-    className: className.className,
+    uuid: theClass.uuid,
+    className: theClass.className,
     students: students.map((st) => ({ uuid: st.uuid, name: st.studentName })),
   });
 });
 
 // create one class
-router.post('/add/:uuid', async (req, res) => {
-  const className = await Class.create({...req.body, teacherUuid: req.params.uuid});
+router.post("/add/:uuid", async (req, res) => {
+  const className = await Class.create({
+    ...req.body,
+    teacherUuid: req.params.uuid,
+  });
   res.send(className);
-})
+});
 
 // get all classes for teacher
-router.get('/all/:teacherUuid', async (req, res) => {
-  const classNames = await Class.find({teacherUuid : req.params.teacherUuid});
+router.get("/all/:teacherUuid", async (req, res) => {
+  const classNames = await Class.find({ teacherUuid: req.params.teacherUuid });
   res.send(classNames);
-})
+});
 
 // add one student to class
 router.post("/:uuid", async (req, res) => {
@@ -44,9 +48,11 @@ router.get("/statistics/:uuid", async (req, res) => {
   let statistics = {};
   const studentStats = [];
   students.forEach(({ assessments }) => {
-    const presenceRate =
-      assessments.reduce((acc, cur) => (cur.present ? acc + 1 : acc), 0) /
-      assessments.length;
+    const totalPresentDays = assessments.reduce(
+      (acc, cur) => (cur.present ? acc + 1 : acc),
+      0
+    );
+    const presenceRate = totalPresentDays / assessments.length;
     const goodPerfRate =
       assessments.reduce((acc, cur) => (cur.goodPerf ? acc + 1 : acc), 0) /
       assessments.length;
@@ -90,6 +96,7 @@ router.get("/statistics/:uuid", async (req, res) => {
       goodPerfRate,
       goodBehaveRate,
       weeklyStats,
+      totalPresentDays,
     });
   });
   statistics.totalStudentCount = students.length;
@@ -135,14 +142,15 @@ router.get("/statistics/:uuid", async (req, res) => {
       }
     }
   });
+  const totalPresentDaysForAll = studentStats.reduce((acc, curr) => acc + curr.totalPresentDays, 0);
   statistics.presenceRateWeekly = Object.values(weeklyPresenceRate).map((v) =>
     ((v / students.length / 5) * 100).toFixed(1)
   );
   statistics.goodPerfRateWeekly = Object.values(weeklyPerfRate).map((v) =>
-    ((v / students.length / 5) * 100).toFixed(1)
+    ((v / totalPresentDaysForAll) * 100).toFixed(1)
   );
   statistics.goodBehaveRateWeekly = Object.values(weeklyBehaveRate).map((v) =>
-    ((v / students.length / 5) * 100).toFixed(1)
+    ((v / totalPresentDaysForAll) * 100).toFixed(1)
   );
   res.send(statistics);
 });
