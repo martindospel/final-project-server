@@ -49,16 +49,16 @@ router.get("/statistics/:uuid", async (req, res) => {
   const studentStats = [];
   students.forEach(({ assessments }) => {
     const totalPresentDays = assessments.reduce(
-      (acc, cur) => (cur.present ? acc + 1 : acc),
+      (acc, cur) => (cur?.present ? acc + 1 : acc),
       0
     );
-    const presenceRate = totalPresentDays / assessments.length;
+    const presenceRate = totalPresentDays / assessments.length || 1;
     const goodPerfRate =
-      assessments.reduce((acc, cur) => (cur.goodPerf ? acc + 1 : acc), 0) /
-      assessments.length;
+      assessments.reduce((acc, cur) => (cur?.goodPerf ? acc + 1 : acc), 0) /
+        assessments.length || 1;
     const goodBehaveRate =
-      assessments.reduce((acc, cur) => (cur.goodBehave ? acc + 1 : acc), 0) /
-      assessments.length;
+      assessments.reduce((acc, cur) => (cur?.goodBehave ? acc + 1 : acc), 0) /
+        assessments.length || 1;
 
     const weeklyStats = {
       presence: {},
@@ -100,6 +100,7 @@ router.get("/statistics/:uuid", async (req, res) => {
     });
   });
   statistics.totalStudentCount = students.length;
+  console.log(studentStats);
   statistics.averagePresenceRate = (
     (studentStats.reduce((acc, cur) => acc + cur.presenceRate, 0) /
       students.length) *
@@ -142,15 +143,18 @@ router.get("/statistics/:uuid", async (req, res) => {
       }
     }
   });
-  const totalPresentDaysForAll = studentStats.reduce((acc, curr) => acc + curr.totalPresentDays, 0);
+  const totalPresentDaysForAll = studentStats.reduce(
+    (acc, curr) => acc + curr.totalPresentDays,
+    0
+  );
   statistics.presenceRateWeekly = Object.values(weeklyPresenceRate).map((v) =>
     ((v / students.length / 5) * 100).toFixed(1)
   );
   statistics.goodPerfRateWeekly = Object.values(weeklyPerfRate).map((v) =>
-    ((v / totalPresentDaysForAll) * 100).toFixed(1)
+    ((v / students.length / 5) * 100).toFixed(1)
   );
   statistics.goodBehaveRateWeekly = Object.values(weeklyBehaveRate).map((v) =>
-    ((v / totalPresentDaysForAll) * 100).toFixed(1)
+    ((v / students.length / 5) * 100).toFixed(1)
   );
   res.send(statistics);
 });
