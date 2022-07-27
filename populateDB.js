@@ -40,7 +40,9 @@ const createStudents = async () => {
     }
     students.push(student);
   }
-  Student.insertMany(students).then(console.log).catch(console.log);
+  Student.insertMany(students)
+    .then(() => console.log("done, students added!"))
+    .catch(() => console.log("an error occured"));
 };
 
 createStudents();
