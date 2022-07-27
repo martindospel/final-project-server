@@ -27,7 +27,7 @@ const createStudents = async () => {
     };
     for (let j = 0; j < 60; j++) {
       const date = new Date();
-      date.setDate(date.getDate() + 1);
+      date.setDate(date.getDate() + j);
       student.assessments.push({
         uuid: j,
         date: date.toISOString(),
