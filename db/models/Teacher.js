@@ -13,14 +13,10 @@ const TeacherSchema = new Schema({
         default: false,
         required: true
     },
-    dob: {
-        type: String,
-        required: true
-    },
-    languages: {
-        type: [String],
-        required: true
-    },
+    email: {
+      type: String,
+      required: true,
+    }
 })
 
 const Teacher = mongoose.model("Teacher", TeacherSchema)
